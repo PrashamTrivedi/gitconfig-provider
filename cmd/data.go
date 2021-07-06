@@ -66,10 +66,10 @@ func getRemotes() ([]GitRemote, error) {
 	var gitRemotes []GitRemote
 	for _, remote := range remotes {
 		if remote != "" {
-
 			name := ""
 			url := ""
 			command := ""
+
 			fmt.Sscanf(remote, "%s %s (%s)", &name, &url, &command)
 
 			gitRemotes = append(gitRemotes, GitRemote{Name: name, Url: url, Command: command})
