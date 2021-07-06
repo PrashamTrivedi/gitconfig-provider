@@ -216,7 +216,6 @@ func init() {
 	if len(currentProviders) == 0 {
 		currentProviders, err := readGitProviders()
 		if err != nil || len(currentProviders) == 0 {
-
 			writeGitProviders(defaultProviders)
 			currentProviders = defaultProviders
 		}
