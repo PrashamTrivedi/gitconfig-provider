@@ -16,36 +16,28 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/spf13/cobra"
 )
 
-// listProvidersCmd represents the listProviders command
-var listProvidersCmd = &cobra.Command{
-	Use:   "listProviders",
-	Short: "Lists git providers",
-
+// resetCmd represents the reset command
+var resetCmd = &cobra.Command{
+	Use:   "reset",
+	Short: "Resets Configs to default values",
 	Run: func(cmd *cobra.Command, args []string) {
-		gitProviders, err := GetProviders()
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
-		for i, provider := range gitProviders {
-			fmt.Printf("%d. %s (%s)\n", i+1, provider.Name, provider.Url)
-			if len(provider.Properties) > 0 {
-				fmt.Println("   Properties")
-				for key, val := range provider.Properties {
-					fmt.Printf("\t%s: %s\n", key, val)
-				}
-			}
-		}
-
+		ResetProviders()
 	},
 }
 
 func init() {
-	RootCmd.AddCommand(listProvidersCmd)
+	RootCmd.AddCommand(resetCmd)
+
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// resetCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// resetCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -16,10 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-	"os"
-	"path/filepath"
-
 	"github.com/spf13/cobra"
 )
 
@@ -30,15 +26,5 @@ var RootCmd = &cobra.Command{
 }
 
 func init() {
-	home, _ := os.UserHomeDir()
 
-	dbPath := filepath.Join(home, "gitProviders.json")
-	fmt.Println(dbPath)
-	defaultFilesData := "[{\"name\":\"github\",\"url\":\"https://github.com/\"},{\"name\":\"bitbucket\",\"url\":\"https://bitbucket.org/\"},{\"name\":\"gitlab\",\"url\":\"https://gitlab.com/\"}]"
-	dbFile, errorData := os.OpenFile(dbPath, os.O_RDWR|os.O_CREATE, 0600)
-	if errorData != nil {
-		fmt.Println("Error in processing file:", errorData.Error())
-		os.Exit(1)
-	}
-	dbFile.WriteString(defaultFilesData)
 }

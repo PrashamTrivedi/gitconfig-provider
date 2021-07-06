@@ -17,35 +17,32 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 )
 
-// listProvidersCmd represents the listProviders command
-var listProvidersCmd = &cobra.Command{
-	Use:   "listProviders",
-	Short: "Lists git providers",
+// applyCmd represents the apply command
+var applyCmd = &cobra.Command{
+	Use:   "apply",
+	Short: "Applies all configuration parameters to current git repository",
 
 	Run: func(cmd *cobra.Command, args []string) {
-		gitProviders, err := GetProviders()
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
-		for i, provider := range gitProviders {
-			fmt.Printf("%d. %s (%s)\n", i+1, provider.Name, provider.Url)
-			if len(provider.Properties) > 0 {
-				fmt.Println("   Properties")
-				for key, val := range provider.Properties {
-					fmt.Printf("\t%s: %s\n", key, val)
-				}
-			}
-		}
+		ApplyPropertiesForRemote()
+		fmt.Println("Properties applied for current provider")
 
 	},
 }
 
 func init() {
-	RootCmd.AddCommand(listProvidersCmd)
+	RootCmd.AddCommand(applyCmd)
+
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// applyCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// applyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
