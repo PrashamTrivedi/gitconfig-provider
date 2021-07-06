@@ -24,7 +24,6 @@ jobs:
         with:
           # either 'goreleaser' (default) or 'goreleaser-pro'
           distribution: goreleaser
-          workdir: cmd
           version: latest
           args: release --rm-dist
         env:
