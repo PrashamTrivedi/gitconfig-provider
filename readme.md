@@ -2,6 +2,7 @@
 
 This is a CLI Utility which stores configurations according to git remotes. And applies your configurations according to current remotes. This commands automatically detects  github, bitbucket and gitlab and applies properties in the repository. 
 
+
 ## How to use
 
 Download CLI according to your platform. And run
@@ -27,3 +28,8 @@ These are list of commands along with their use cases. To know the inputs and ot
 - `reset`: Reset all git providers and properties to the original state.
 
 - `apply`: Detects remote from current git repository, for remote detection it prefers `origin` as remote name, if no `origin` found, it prefers first remote from `git remote -v` command, and applies configuration according to detected remote.
+
+
+## Test locally
+
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/PrashamTrivedi/gitconfig-provider)
