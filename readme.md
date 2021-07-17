@@ -18,6 +18,8 @@ These are list of commands along with their use cases. To know the inputs and ot
 
 - `listProviders`: Lists all providers along with properties we have added using this CLI,
 
+- `addProvider`: Adds new provider with empty properties
+
 - `addConfig`: Adds properties as key value pair to given git provider.
 
 - `deleteConfig`: Deletes property from given git provider.

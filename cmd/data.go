@@ -34,8 +34,32 @@ var defaultProviders []GitProvider = []GitProvider{
 
 var currentProviders []GitProvider
 
+//Check if the provider is already in the list, if not, add into the list and save to the file.
+func AddProvider(providerName string, providerUrl string) {
+	provider, index := GetProviderByName(providerName)
+	//if index is -1 get provider by url
+	if index == -1 {
+		provider, index = GetProviderByUrl(providerUrl)
+	}
+	//return provider if index is not -1
+	if index != -1 {
+		currentProviders[index] = provider
+		return
+	} else {
+		//create a git provider with providerName and providerUrl, keep properties blank
+		provider := GitProvider{Name: providerName, Url: providerUrl, Properties: make(map[string]string)}
+		currentProviders = append(currentProviders, provider)
+		writeGitProviders(currentProviders)
+	}
+}
+
 func AddProviderPropertyFromName(providerName string, propertyKey string, propertyValue string) {
 	provider, index := GetProviderByName(providerName)
+	//throw error if index is -1
+	if index == -1 {
+		fmt.Println("Error: Provider not found")
+		os.Exit(1)
+	}
 	if provider.Properties == nil || len(provider.Properties) == 0 {
 		provider.Properties = make(map[string]string)
 	}
@@ -100,6 +124,13 @@ func runUpdateCommand(key string, value string) {
 }
 func AddProviderPropertyFromUrl(providerUrl string, propertyKey string, propertyValue string) {
 	provider, index := GetProviderByUrl(providerUrl)
+
+	//throw error if index is -1
+	if index == -1 {
+		fmt.Println("Error: Provider not found")
+		os.Exit(1)
+	}
+
 	if provider.Properties == nil || len(provider.Properties) == 0 {
 		provider.Properties = make(map[string]string)
 	}
@@ -110,6 +141,13 @@ func AddProviderPropertyFromUrl(providerUrl string, propertyKey string, property
 
 func RemoveProviderProperty(providerName string, propertyKey string) {
 	provider, index := GetProviderByName(providerName)
+
+	//throw error if index is -1
+	if index == -1 {
+		fmt.Println("Error: Provider not found")
+		os.Exit(1)
+	}
+
 	if provider.Properties == nil || len(provider.Properties) == 0 {
 		provider.Properties = make(map[string]string)
 	}
@@ -117,6 +155,7 @@ func RemoveProviderProperty(providerName string, propertyKey string) {
 	updateProvider(provider, index)
 	runUpdateCommand(propertyKey, "")
 }
+
 func GetProviderByName(providerName string) (GitProvider, int) {
 	indexToReturn := -1
 	var providerToReturn GitProvider
@@ -141,7 +180,7 @@ func GetProviderByUrl(providerUrl string) (GitProvider, int) {
 		readGitProviders()
 	}
 	for index, provider := range currentProviders {
-		if strings.HasPrefix(provider.Url, providerUrl) {
+		if strings.HasPrefix(providerUrl, provider.Url) {
 			providerToReturn = provider
 			indexToReturn = index
 			break
@@ -173,7 +212,12 @@ func ApplyPropertiesForRemote() {
 		}
 	}
 
-	provider, _ := GetProviderByUrl(firstRemote.Url)
+	provider, index := GetProviderByUrl(firstRemote.Url)
+	//if index is -1 then no provider found
+	if index == -1 {
+		fmt.Println("Error: Provider not found")
+		os.Exit(1)
+	}
 	applyCommandFromProvider(provider)
 
 }
