@@ -33,3 +33,8 @@ These are list of commands along with their use cases. To know the inputs and ot
 ## Test locally
 
 [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/PrashamTrivedi/gitconfig-provider)
+
+### Test/Read Code in Browser
+- [Open In github.dev](https://github.dev/PrashamTrivedi/gitconfig-provider) 
+
+- [Open In vscode.dev](https://vscode.dev/github/PrashamTrivedi/gitconfig-provider)
