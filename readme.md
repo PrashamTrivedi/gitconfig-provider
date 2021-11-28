@@ -30,11 +30,8 @@ These are list of commands along with their use cases. To know the inputs and ot
 - `apply`: Detects remote from current git repository, for remote detection it prefers `origin` as remote name, if no `origin` found, it prefers first remote from `git remote -v` command, and applies configuration according to detected remote.
 
 
-## Test locally
+## Test locally or on your broswer.
 
 [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/PrashamTrivedi/gitconfig-provider)
 
-### Test/Read Code in Browser
-- [Open In github.dev](https://github.dev/PrashamTrivedi/gitconfig-provider) 
-
-- [Open In vscode.dev](https://vscode.dev/github/PrashamTrivedi/gitconfig-provider)
+[Open In github.dev](https://github.dev/PrashamTrivedi/gitconfig-provider) 
