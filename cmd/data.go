@@ -110,7 +110,14 @@ func runUpdateCommand(key string, value string) {
 		commandFlag = "/c"
 	}
 
-	configCmd := fmt.Sprintf("git config \"%s\" \"%s\"", key, value)
+	//check if key has space
+	if strings.Contains(key, " ") {
+		key = "\"" + key + "\""
+	}
+	if strings.Contains(value, " ") {
+		value = "\"" + value + "\""
+	}
+	configCmd := fmt.Sprintf("git config %s %s", key, value)
 
 	command := exec.Command(mainCommand, commandFlag, configCmd)
 	var stderr bytes.Buffer
