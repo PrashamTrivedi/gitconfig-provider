@@ -20,23 +20,27 @@ archives:
       386: i386
       amd64: x86_64
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ .Tag }}-next"
 release:
   discussion_category_name: General
+  mode: append
 changelog:
   sort: asc
   groups:
     - title: Features
       regexp: "^.*feat[(\\w)]*:+.*$"
       order: 0
-    - title: 'Bug fixes'
+    - title: "Bug fixes"
       regexp: "^.*fix[(\\w)]*:+.*$"
       order: 1
+    - title: "Engineering"
+      regexp: "^.*Engineering[(\\w)]*:+.*$"
+      order: 2
     - title: Others
       order: 999
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - "^docs:"
+      - "^test:"
