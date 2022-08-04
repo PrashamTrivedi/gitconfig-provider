@@ -170,7 +170,7 @@ func GetProviderByName(providerName string) (GitProvider, int) {
 		readGitProviders()
 	}
 	for index, provider := range currentProviders {
-		if provider.Name == providerName {
+		if strings.EqualFold(provider.Name, providerName) {
 			providerToReturn = provider
 			indexToReturn = index
 			break
