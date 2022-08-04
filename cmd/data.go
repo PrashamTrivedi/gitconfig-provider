@@ -57,7 +57,7 @@ func AddProviderPropertyFromName(providerName string, propertyKey string, proper
 	provider, index := GetProviderByName(providerName)
 	//throw error if index is -1
 	if index == -1 {
-		fmt.Println("Error: Provider not found")
+		fmt.Println("Error: Provider not found. Run gitconfig-provider listProviders to get available git providers")
 		os.Exit(1)
 	}
 	if provider.Properties == nil || len(provider.Properties) == 0 {
@@ -134,7 +134,7 @@ func AddProviderPropertyFromUrl(providerUrl string, propertyKey string, property
 
 	//throw error if index is -1
 	if index == -1 {
-		fmt.Println("Error: Provider not found")
+		fmt.Println("Error: Provider not found. Run gitconfig-provider listProviders to get available git providers")
 		os.Exit(1)
 	}
 
@@ -151,7 +151,7 @@ func RemoveProviderProperty(providerName string, propertyKey string) {
 
 	//throw error if index is -1
 	if index == -1 {
-		fmt.Println("Error: Provider not found")
+		fmt.Println("Error: Provider not found. Run gitconfig-provider listProviders to get available git providers")
 		os.Exit(1)
 	}
 
