@@ -187,7 +187,7 @@ func GetProviderByUrl(providerUrl string) (GitProvider, int) {
 		readGitProviders()
 	}
 	for index, provider := range currentProviders {
-		if strings.HasPrefix(providerUrl, provider.Url) {
+		if strings.HasSuffix(providerUrl, provider.Url) {
 			providerToReturn = provider
 			indexToReturn = index
 			break
