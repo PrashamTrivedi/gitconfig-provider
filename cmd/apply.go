@@ -21,19 +21,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var providerNameToApply string
+
 // applyCmd represents the apply command
 var applyCmd = &cobra.Command{
 	Use:   "apply",
 	Short: "Applies all configuration parameters to current git repository",
 
 	Run: func(cmd *cobra.Command, args []string) {
-		ApplyPropertiesForRemote()
+		ApplyPropertiesForRemote(providerNameToApply)
 		fmt.Println("Properties applied for current provider")
 
 	},
 }
 
 func init() {
+	applyCmd.Flags().StringVarP(&providerNameToApply, "providerName", "p", "", "Apply Provider Values by name, Default value \"\" which applies values according to current provider")
 	RootCmd.AddCommand(applyCmd)
 
 	// Here you will define your flags and configuration settings.
