@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -24,6 +25,7 @@ func TestGetProviderByName(t *testing.T) {
 
 func TestGetProviderByUrl(t *testing.T) {
 	// ResetProviders()
+	defer ResetProviders()
 
 	// Test Case 1: Test with empty providerUrl, should return -1 and nil
 	provider, index := GetProviderByUrl("")
@@ -57,16 +59,16 @@ func TestGetProviderByUrl(t *testing.T) {
 	}
 
 	provider, index = GetProviderByUrl("https://github.com/myoffice/")
-	if index != -1 {
-		t.Errorf("Expected index to be -1, but got %v", index)
+	if index != 0 {
+		t.Errorf("Expected index to be 0, but got %v", index)
 	}
-	if provider.Name != "" {
-		t.Errorf("Expected provider to be nil, but got %v", provider)
+	if strings.ToLower(provider.Name) != "github" {
+		t.Errorf("Expected provider to be github, but got %v", provider)
 	}
 }
 
 func TestApply(t *testing.T) {
-	failingScenario := []GitProvider{
+	scenarioToTest := []GitProvider{
 		{
 			Name: "Github", Url: "https://github.com/",
 		},
@@ -75,7 +77,8 @@ func TestApply(t *testing.T) {
 		},
 	}
 
-	writeGitProviders(failingScenario)
+	writeGitProviders(scenarioToTest)
+	defer ResetProviders()
 
 	provider, index := GetProviderByUrl("https://github.com/PrashamTrivedi/gitconfig-provider.git")
 
@@ -87,11 +90,12 @@ func TestApply(t *testing.T) {
 	}
 
 	provider, index = GetProviderByUrl("https://github.com/office/my-repo.git")
+	fmt.Println(provider, index)
 	if index == -1 {
 		t.Errorf("Provider must be found")
 	}
 	if strings.ToLower(provider.Name) != "githuboffice" {
 		t.Errorf("Provider Name should be GithubOffice but got %s", provider.Name)
 	}
-	ResetProviders()
+
 }

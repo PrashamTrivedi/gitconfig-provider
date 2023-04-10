@@ -35,22 +35,33 @@ var defaultProviders []GitProvider = []GitProvider{
 var currentProviders []GitProvider
 
 //Check if the provider is already in the list, if not, add into the list and save to the file.
-func AddProvider(providerName string, providerUrl string) {
-	provider, index := GetProviderByName(providerName)
-	//if index is -1 get provider by url
-	if index == -1 {
-		provider, index = GetProviderByUrl(providerUrl)
-	}
-	//return provider if index is not -1
-	if index != -1 {
-		currentProviders[index] = provider
-		return
+func AddProvider(providerName, providerUrl string, doForcefully bool) (GitProvider, int) {
+	if doForcefully {
+		fmt.Println("CAUTION!! This is an experimental API under testing, Adding a provider forcefully may lead to a situation where a wrong provider can be recognised.\n If this is the situation, use one of these 3 remedies. \n1. Use apply with desired provider name e.g. `gitconfig-provider apply githubOffice` \n2. Remove the provider you have added forcefully and \n3. Reset all providers and add desired providers and properties accordingly ")
+		return addNewProvider(providerName, providerUrl)
 	} else {
-		//create a git provider with providerName and providerUrl, keep properties blank
-		provider := GitProvider{Name: providerName, Url: providerUrl, Properties: make(map[string]string)}
-		currentProviders = append(currentProviders, provider)
-		writeGitProviders(currentProviders)
+
+		provider, index := GetProviderByName(providerName)
+		//if index is -1 get provider by url
+		if index == -1 {
+			provider, index = GetProviderByUrl(providerUrl)
+		}
+		//return provider if index is not -1
+		if index != -1 {
+			currentProviders[index] = provider
+			return provider, index
+		} else {
+			//create a git provider with providerName and providerUrl, keep properties blank
+			return addNewProvider(providerName, providerUrl)
+		}
 	}
+}
+
+func addNewProvider(providerName string, providerUrl string) (GitProvider, int) {
+	provider := GitProvider{Name: providerName, Url: providerUrl, Properties: make(map[string]string)}
+	currentProviders = append(currentProviders, provider)
+	writeGitProviders(currentProviders)
+	return provider, -1
 }
 
 func AddProviderPropertyFromName(providerName string, propertyKey string, propertyValue string) {
@@ -146,6 +157,20 @@ func AddProviderPropertyFromUrl(providerUrl string, propertyKey string, property
 	runUpdateCommand(propertyKey, propertyValue)
 }
 
+func RemoveProvider(providerName, providerUrl string) {
+	provider, index := GetProviderByName(providerName)
+	if index == -1 {
+		provider, index = GetProviderByUrl(providerUrl)
+	}
+	if index == -1 {
+		fmt.Printf("No provider with name %s or url %s is found\n", providerName, providerUrl)
+	}
+
+	currentProviders = append(currentProviders[:index], currentProviders[index+1:]...)
+	writeGitProviders(currentProviders)
+	fmt.Printf("Provider %s (with Url: %s) is removed along with the properties\n", provider.Name, provider.Url)
+}
+
 func RemoveProviderProperty(providerName string, propertyKey string) {
 	provider, index := GetProviderByName(providerName)
 
@@ -190,7 +215,7 @@ func GetProviderByUrl(providerUrl string) (GitProvider, int) {
 		if strings.HasPrefix(providerUrl, provider.Url) {
 			providerToReturn = provider
 			indexToReturn = index
-			break
+			// break
 		}
 	}
 
@@ -205,24 +230,36 @@ func GetProviders() ([]GitProvider, error) {
 	return readGitProviders()
 }
 
-func ApplyPropertiesForRemote() {
-	remotes, err := getRemotes()
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
-	}
-	firstRemote := remotes[0]
-	for _, remote := range remotes {
-		if remote.Name == "origin" {
-			firstRemote = remote
-			break
+func ApplyPropertiesForRemote(providerName string) {
+	url := ""
+	if providerName != "" {
+		provider, index := GetProviderByName(providerName)
+		if index == -1 {
+			fmt.Println("Provider with name:", providerName, "Not found")
+			os.Exit(1)
 		}
-	}
+		url = provider.Url
+	} else {
 
-	provider, index := GetProviderByUrl(firstRemote.Url)
+		remotes, err := getRemotes()
+		if err != nil {
+			fmt.Println(err.Error())
+			os.Exit(1)
+		}
+		firstRemote := remotes[0]
+		for _, remote := range remotes {
+			if remote.Name == "origin" {
+				firstRemote = remote
+				break
+			}
+		}
+		url = firstRemote.Url
+
+	}
+	provider, index := GetProviderByUrl(url)
 	//if index is -1 then no provider found
 	if index == -1 {
-		fmt.Println("Error: Provider not found")
+		fmt.Println("Error: Provider not found, Checking for ", url)
 		os.Exit(1)
 	}
 	applyCommandFromProvider(provider)
