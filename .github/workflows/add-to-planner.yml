@@ -1,0 +1,26 @@
+name: Add to GitHub Project
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Add item to Project
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const projectId = ${{ secrets.PROJECT_ID }}; // Replace with your actual Project ID
+          const itemId = context.payload.issue ? context.payload.issue.node_id : context.payload.pull_request.node_id;
+          const contentType = context.payload.issue ? 'Issue' : 'PullRequest';
+
+          await github.rest.projects.createCard({
+            project_id: projectId,
+            content_id: itemId,
+            content_type: contentType
+          });
