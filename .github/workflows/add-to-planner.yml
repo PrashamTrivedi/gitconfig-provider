@@ -15,7 +15,7 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const projectId = ${{ secrets.PROJECT_ID }}; // Replace with your actual Project ID
+          const projectId = "PVT_kwHOAA7Whs4Ag_Ol"; // Replace with your actual Project ID
           const itemId = context.payload.issue ? context.payload.issue.node_id : context.payload.pull_request.node_id;
           const contentType = context.payload.issue ? 'Issue' : 'PullRequest';
 
